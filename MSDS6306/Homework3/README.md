@@ -1,6 +1,6 @@
-title: "Doing Data Science Live Session 03 Assignment"
-author: "Drew Wilkins"
-date: "September 11, 2018"
+Doing Data Science Live Session 03 Assignment\n
+Author: Drew Wilkins\n
+Date: September 11, 2018\n
 
 
 
