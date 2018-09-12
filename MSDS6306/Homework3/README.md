@@ -1,6 +1,12 @@
-Live Session 03 Homework Assignment
-Author: Andrew Wilkins
-Date: September 11, 2018
+---
+title: "Doing Data Science Live Session 03 Assignment"
+author: "Drew Wilkins"
+date: "September 11, 2018"
+output: 
+  html_document:
+    keep_md: true
+---
+
 
 The files in this folder pertain to the homework assignment for unit 3.
 Questions and answers are formatted in the HW03.Rmd file .html file.
