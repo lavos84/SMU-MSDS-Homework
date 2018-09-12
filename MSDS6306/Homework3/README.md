@@ -1,6 +1,8 @@
-Doing Data Science Live Session 03 Assignment\n
-Author: Drew Wilkins\n
-Date: September 11, 2018\n
+Doing Data Science Live Session 03 Assignment
+
+Author: Drew Wilkins
+
+Date: September 11, 2018
 
 
 
