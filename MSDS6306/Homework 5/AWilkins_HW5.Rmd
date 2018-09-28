@@ -1,0 +1,98 @@
+---
+title: "Homework 5"
+author: "Drew Wilkins"
+date: "September 27, 2018"
+output: 
+  html_document:
+    keep_md: true
+---
+
+# Question 1: Data Munging
+
+a. First, import the .txt file into R so you can process it. Keep in mind this is not a CSV file. You might have to open the file to see what you're dealing with. Assign the resulting data frame to an object, df, that consists of three columns with humanreadable column names for each.
+
+```{r Q1a, echo=TRUE}
+# Read in the data
+df <- read.table("yob2016.txt",sep=";", stringsAsFactors = FALSE)
+names(df) <- c("Name", "Sex", "Count")
+```
+
+b. Display the summary and structure of df
+
+```{r Q1b, echo=TRUE}
+summary(df)
+str(df)
+```
+
+c. Your client tells you that there is a problem with the raw file. One name was entered twice and misspelled. The client cannot remember which name it is; there are thousands he saw! But he did mention he accidentally put three y's at the end of the name. Write an R command to figure out which name it is and display it.
+
+```{r Q1c, echo=TRUE}
+grep("yyy$", df$Name, value=TRUE)
+```
+
+d. Upon finding the misspelled name, please remove this particular observation, as the client says it's redundant. Save the remaining dataset as an object: y2016
+
+```{r Q1d, echo=TRUE}
+y2016 <- df[-grep("yyy$", df$Name),]
+```
+
+# Question 2: Data Merging
+
+a. Like 1a, please import the .txt file into R. Look at the file before you do. You might have to change some options to import it properly. Again, please give the dataframe human-readable column names. Assign the dataframe to y2015.
+
+```{r Q2a, echo=TRUE}
+y2015 <- read.table("yob2015.txt", sep=",", header = FALSE)
+names(y2015) <- c("Name", "Sex", "Count")
+```
+
+b. Display the last ten rows in the dataframe. Describe something you find interesting about these 10 rows.
+
+```{r Q2b, echo=TRUE}
+tail(y2015,10)
+```
+
+It is interesting that the last 10 entries all occur exactly 5 times.  Not only are they all names I've never heard of, but more interesting is that there are no names with a count less than 5.
+
+c. Merge y2016 and y2015 by your Name column; assign it to final. The client only cares about names that have data for both 2016 and 2015; there should be no NA values in either of your amount of children rows after merging.
+
+```{r Q2c, echo=TRUE}
+# Merge the 2 data frames together at Name
+final <- merge(y2016, y2015, by= "Name")
+```
+
+# Questoin 3. Data Summary
+
+a. Create a new column called "Total" in final that adds the amount of children in 2015 and 2016 together. In those two years combined, how many people were given popular names?
+
+```{r Q3a, echo=TRUE}
+final$Total <- final$Count.x + final$Count.y
+summary(final$Total)
+```
+
+From the summary we can say that names in the 3rd quartile may be considered "popular."  Using this convention, we can see that `r summary(final$Total)[5]` children were given popular names.
+
+b. Sort the data by Total. What are the top 10 most popular names?
+
+```{r Q3b, echo=TRUE}
+final <- final[order(-final$Total),]
+head(final, 10)
+```
+
+c. The client is expecting a girl! Omit boys and give the top 10 most popular girl's names.
+
+```{r Q3c, echo=TRUE}
+girls <- final[which(final$Sex.x=="F" & final$Sex.y=="F"),]
+head(girls, 10)
+```
+
+d. Write these top 10 girl names and their Totals to a CSV file. Leave out the other columns entirely.
+
+```{r Q3d, echo=TRUE}
+girls2 <- data.frame(Name= girls$Name, Count= girls$Total)
+write.csv(girls2, "Girl_names.csv")
+```
+
+#Question 4
+
+Upload to GitHub (10 points): Push at minimum your RMarkdown for this
+homework assignment and a Codebook to one of your GitHub repositories (you might place this in a Homework repo like last week). The Codebook should contain a short definition of each object you create, and if creating multiple files, which file it is contained in. You are welcome and encouraged to add other files-just make sure you have a description and directions that are helpful for the grader.

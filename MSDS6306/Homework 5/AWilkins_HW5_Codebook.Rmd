@@ -1,0 +1,91 @@
+---
+title: "Homework 4 Codebook"
+author: "Drew Wilkins"
+date: "September 27, 2018"
+output: 
+  html_document:
+    keep_md: true
+---
+
+# Raw Data
+
+The raw data for this assignment was provided in two .txt files. The first, yob2015.txt, is a standard comma separated file containing three
+columns with a first name, a gender, and the amount of children given that name for 2015.  The second, yob2016.txt is similar to yob2015.txt, except that it is separated by semicolons rather than commas.  The 2015 data was read in using the read.table() command into a data frame called y2015.  The 2016 data was read in using the read.table() command into a data frame called df.
+
+``` {r RawData}
+y2015 <- read.table("yob2015.txt", sep=",", header = FALSE)
+df <- read.table("yob2016.txt", sep=";", header = FALSE)
+```
+
+# Variable Information
+
+The following column names were assigned to the y2015 and df data frames:
+
+Names   (The name given to the child)
+
+Sex     (The sex of the child)
+
+Count   (The number of children given this name)
+
+
+``` {r Names}
+names(y2015) <- c("Name", "Sex", "Count")
+names(df) <- c("Name", "Sex", "Count")
+```
+
+# Tidy Data
+
+df contained a mispelled entry that needed to be removed.  It was known that the mispelled entry had three y's at the end of the name.  This observation was removed and the result asigned to a new data frame called y2016.
+
+``` {r RemoveName}
+y2016 <- df[-grep("yyy$", df$Name),]
+```
+
+Next, the two data sets were merged wherever there were matching names common to both data frames.  Names that were unmatched were ommitted.  The result was assigned to a new data frame called final.
+
+``` {r Merge}
+final <- merge(y2016, y2015, by= "Name")
+```
+
+final contains the following variables:
+
+Name    (The names common to y2015 and y2016)
+
+Sex.x   (The sex assigned to the name in y2016)
+
+Count.x (The number of children given the name in y2016)
+
+Sex.y   (The sex assigned to the name in y2015)
+
+Count.y (The number of children given the name in y2015)
+
+An additionaly column called "Total" was defined as the sum of Count.x and Count.y.  
+
+``` {r Total}
+final$Total <- final$Count.x + final$Count.y
+```
+
+Lastly, final was sorted in descending order of the value contained in Total.
+
+``` {r Sorted}
+final <- final[order(-final$Total),]
+```
+
+Once it was known that the client was expecting a girl, all of the rows in final containing males were omitted and stored in a new data frame called girls.
+
+``` {r Girls}
+girls <- final[which(final$Sex.x=="F" & final$Sex.y=="F"),]
+```
+
+Only the Name and Total values are of interest, so girls2 was defined as just the Name and Total columns of girls.  The result was saved to a .csv titled "Girl_names.csv"
+
+``` {r csv}
+girls2 <- data.frame(Name= girls$Name, Count= girls$Total)
+write.csv(girls2, "Girl_names.csv")
+```
+
+# Preview of Tidy Data (final)
+
+``` {r Head}
+head(final, 15)
+```
