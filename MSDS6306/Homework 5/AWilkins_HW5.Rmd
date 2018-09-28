@@ -96,3 +96,7 @@ write.csv(girls2, "Girl_names.csv")
 
 Upload to GitHub (10 points): Push at minimum your RMarkdown for this
 homework assignment and a Codebook to one of your GitHub repositories (you might place this in a Homework repo like last week). The Codebook should contain a short definition of each object you create, and if creating multiple files, which file it is contained in. You are welcome and encouraged to add other files-just make sure you have a description and directions that are helpful for the grader.
+
+```{r GitHub}
+#https://github.com/lavos84/SMU-MSDS-Homework/tree/master/MSDS6306/Homework%205
+```
